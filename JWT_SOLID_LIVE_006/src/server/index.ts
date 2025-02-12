@@ -1,30 +1,26 @@
 import express from "express";
-import { makeSignUpController } from "../factories/makeSignUpController";
+
+import { routeAdapter } from "./adapters/routeAdapter";
+
+import { makeAuthenticationMiddleware } from "../factories/makeAuthenticationMiddleware";
+import { makeListLeadsController } from "../factories/makeListLeadsController";
 import { makeSignInController } from "../factories/makeSignInController";
+import { makeSignUpController } from "../factories/makeSignUpController";
+import { middlewareAdapter } from "./adapters/middlewareAdapter";
 
 const app = express();
 
 app.use(express.json());
 
-app.post("/sign-up", async (request, response) => {
-  const signUpController = makeSignUpController();
+app.post("/sign-up", routeAdapter(makeSignUpController()));
+app.post("/sign-in", routeAdapter(makeSignInController()));
 
-  const { statusCode, body } = await signUpController.handle({
-    body: request.body,
-  });
-
-  response.status(statusCode).json(body);
-});
-
-app.post("/sign-in", async (request, response) => {
-  const signInController = makeSignInController();
-
-  const { statusCode, body } = await signInController.handle({
-    body: request.body,
-  });
-  response.status(statusCode).json(body);
-});
+app.get(
+  "/leads",
+  middlewareAdapter(makeAuthenticationMiddleware()),
+  routeAdapter(makeListLeadsController())
+);
 
 app.listen(3001, () => {
-  console.log("server started at http://localhost:3001");
+  console.log("Server started at http://localhost:3001");
 });
