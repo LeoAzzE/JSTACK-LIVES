@@ -7,6 +7,10 @@ type Request = FastifyRequest<{
   Querystring: { page: string };
   Body: { name: string };
   Headers: { org: string };
+  Reply: {
+    201: { id: string };
+    "4xx": { message: "qlr coisa" };
+  };
 }>;
 
 fastify.post("/users/:id", (request: Request, reply) => {
