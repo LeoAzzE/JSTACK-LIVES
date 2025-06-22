@@ -2,13 +2,15 @@ import { Account } from '@application/entities/Account';
 
 export class AccountItem {
   private readonly type = 'Account';
+
   private readonly keys: AccountItem.Keys;
-  constructor(public attrs: AccountItem.Attributes) {
+
+  constructor(private readonly attrs: AccountItem.Attributes) {
     this.keys = {
       PK: AccountItem.getPK(this.attrs.id),
       SK: AccountItem.getSK(this.attrs.id),
-      GSI1PK: AccountItem.getGS1PK(this.attrs.email),
-      GSI1SK: AccountItem.getGS1SK(this.attrs.email),
+      GSI1PK: AccountItem.getGSI1PK(this.attrs.email),
+      GSI1SK: AccountItem.getGSI1SK(this.attrs.email),
     };
   }
 
@@ -44,11 +46,11 @@ export class AccountItem {
     return `ACCOUNT#${accountId}`;
   }
 
-  static getGS1PK(email: string): AccountItem.Keys['GSI1PK'] {
+  static getGSI1PK(email: string): AccountItem.Keys['GSI1PK'] {
     return `ACCOUNT#${email}`;
   }
 
-  static getGS1SK(email: string): AccountItem.Keys['GSI1SK'] {
+  static getGSI1SK(email: string): AccountItem.Keys['GSI1SK'] {
     return `ACCOUNT#${email}`;
   }
 }
@@ -64,7 +66,7 @@ export namespace AccountItem {
   export type Attributes = {
     id: string;
     email: string;
-    externalId: string;
+    externalId: string | undefined;
     createdAt: string;
   };
 

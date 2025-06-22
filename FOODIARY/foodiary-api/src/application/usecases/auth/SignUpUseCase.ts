@@ -10,34 +10,49 @@ export class SignUpUseCase {
     private readonly authGateway: AuthGateway,
     private readonly accountRepository: AccountRepository,
   ) {}
+
   async execute({
     email,
     password,
-  }: SignUpUseCase.Input): Promise<SignUpUseCase.OutPut> {
-    const emailAlreadyInUse = await this.accountRepository.findByEmail(email);
+  }: SignUpUseCase.Input): Promise<SignUpUseCase.Output> {
+    const emailAlreadyInUse = await this.accountRepository.findEmail(email);
 
     if (emailAlreadyInUse) {
       throw new EmailAlreadyInUse();
     }
-    const { externalId } = await this.authGateway.signUp({ email, password });
 
-    const account = new Account({ email, externalId });
+    const account = new Account({ email });
+
+    const { externalId } = await this.authGateway.signUp({
+      email,
+      password,
+      internalId: account.id,
+    });
+
+    account.externalId = externalId;
+
     await this.accountRepository.create(account);
 
-    const { acessToken, refreshToken } = await this.authGateway.signIn({
+    const { accessToken, refreshToken } = await this.authGateway.signIn({
       email,
       password,
     });
 
     return {
-      acessToken,
+      accessToken,
       refreshToken,
     };
   }
 }
 
 export namespace SignUpUseCase {
-  export type Input = { email: string; password: string };
+  export type Input = {
+    email: string;
+    password: string;
+  };
 
-  export type OutPut = { acessToken: string; refreshToken: string };
+  export type Output = {
+    accessToken: string;
+    refreshToken: string;
+  };
 }

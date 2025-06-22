@@ -8,7 +8,8 @@ import { AccountItem } from '../items/AccountItem';
 @Injectable()
 export class AccountRepository {
   constructor(private readonly config: AppConfig) {}
-  async findByEmail(email: string): Promise<Account | null> {
+
+  async findEmail(email: string): Promise<Account | null> {
     const command = new QueryCommand({
       IndexName: 'GSI1',
       TableName: this.config.db.dynamodb.mainTable,
@@ -19,10 +20,11 @@ export class AccountRepository {
         '#GSI1SK': 'GSI1SK',
       },
       ExpressionAttributeValues: {
-        ':GSI1PK': AccountItem.getGS1PK(email),
-        ':GSI1SK': AccountItem.getGS1SK(email),
+        ':GSI1PK': AccountItem.getGSI1PK(email),
+        ':GSI1SK': AccountItem.getGSI1SK(email),
       },
     });
+
     const { Items = [] } = await dynamoClient.send(command);
     const account = Items[0] as AccountItem.ItemType | undefined;
 
@@ -32,12 +34,15 @@ export class AccountRepository {
 
     return AccountItem.toEntity(account);
   }
+
   async create(account: Account): Promise<void> {
     const accountItem = AccountItem.fromEntity(account);
+
     const command = new PutCommand({
       TableName: this.config.db.dynamodb.mainTable,
       Item: accountItem.toItem(),
     });
+
     await dynamoClient.send(command);
   }
 }
