@@ -3,14 +3,39 @@ org: leochavesdev
 # "service" is the name of this project. This will also be added to your AWS resource names.
 service: live065
 
+custom:
+  defaultStage: dev
+
 provider:
   name: aws
-  runtime: nodejs20.x
+  region: sa-east-1
+  stage: ${opt:stage, self:custom.defaultStage}
+  runtime: nodejs22.x
+  architecture: arm64
+  timeout: 10
+  memorySize: 128
+
+  build:
+    esbuild:
+    minify: true
+    bundle: true
+    sourcemap: false
+    external:
+      - "@aws-sdk/*"
+    exclude:
+      - "@aws-sdk/*"
 
 functions:
+  createProduct:
+    handler: src/createProduct.handler
+    events:
+      - httpApi:
+          path: /products
+          method: POST
+
   hello:
-    handler: handler.hello
+    handler: src/hello.handler
     events:
       - httpApi:
           path: /
-          method: get
+          method: GET
