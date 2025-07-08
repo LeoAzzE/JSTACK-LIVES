@@ -15,6 +15,9 @@ provider:
   timeout: 10
   memorySize: 128
 
+  package:
+    individually: true
+
   build:
     esbuild:
     minify: true

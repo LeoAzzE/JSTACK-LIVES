@@ -12,11 +12,17 @@ importers:
         specifier: ^3.25.75
         version: 3.25.75
     devDependencies:
+      '@types/aws-lambda':
+        specifier: ^8.10.150
+        version: 8.10.150
       typescript:
         specifier: ^5.8.3
         version: 5.8.3
 
 packages:
+
+  '@types/aws-lambda@8.10.150':
+    resolution: {integrity: sha512-AX+AbjH/rH5ezX1fbK8onC/a+HyQHo7QGmvoxAE42n22OsciAxvZoZNEr22tbXs8WfP1nIsBjKDpgPm3HjOZbA==}
 
   typescript@5.8.3:
     resolution: {integrity: sha512-p1diW6TqL9L07nNxvRMM7hMMw4c5XOo/1ibL4aAIGmSAt9slTE1Xgw5KWuof2uTOvCg9BY7ZRi+GaF+7sfgPeQ==}
@@ -27,6 +33,8 @@ packages:
     resolution: {integrity: sha512-OhpzAmVzabPOL6C3A3gpAifqr9MqihV/Msx3gor2b2kviCgcb+HM9SEOpMWwwNp9MRunWnhtAKUoo0AHhjyPPg==}
 
 snapshots:
+
+  '@types/aws-lambda@8.10.150': {}
 
   typescript@5.8.3: {}
 
