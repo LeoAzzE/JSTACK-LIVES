@@ -4,12 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "deploy": "./build-layers.sh && severless deploy"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "packageManager": "pnpm@10.11.0",
+  "packageManagerStrict": false,
   "devDependencies": {
     "@eslint/js": "^9.31.0",
     "@types/aws-lambda": "^8.10.150",
@@ -24,6 +25,18 @@
     "@aws-sdk/client-s3": "^3.845.0",
     "@aws-sdk/lib-dynamodb": "^3.844.0",
     "@aws-sdk/s3-request-presigner": "^3.845.0",
+    "sharp": "^0.33.5",
     "zod": "^4.0.5"
+  },
+  "pnpm": {
+    "supportedArchitectures": {
+      "os": [
+        "current",
+        "linux"
+      ],
+      "cpu": [
+        "arm64"
+      ]
+    }
   }
 }
